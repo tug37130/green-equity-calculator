@@ -8,9 +8,9 @@ location = '&for=us:*'
 
 # List of variables to pull
 variables = [
-    'DP02,DP02_0011PE,DP02_0068PE',
-    'DP03,DP03_0119PE',
-    'DP04,DP04_0046PE'
+    'DP02_0011PE,DP02_0068PE',
+    'DP03_0119PE',
+    'DP04_0046PE'
 ]
 
 # API key - replace 'your_api_key' with your actual API key
