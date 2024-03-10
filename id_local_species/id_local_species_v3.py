@@ -351,7 +351,7 @@ def write_readme(state_abbr):
             f.write("- {}: {}\n".format(flower, scientific_name))
 
 #write_readme('PA')
-
+# Current output of readme.txt is in current directory
 #%%
 # delete readme.txt tool
 import os
