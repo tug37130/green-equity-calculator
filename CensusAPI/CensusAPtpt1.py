@@ -17,10 +17,23 @@ variables = [
 usr_key = f#place key here in quotations)
 
 # Loop through variables and make API requests
+#for i, variable_set in enumerate(variables, start=1):
+    # Construct the API request URL for each variable set
+#    query_url = f"{host}{year}{dataset_acronym}{g}{variable_set}{location}&key={usr_key}"
+    # Use request package to call out to the API
+#    response = requests.get(query_url)
+#    print(response.text)
+
+responses = {}
+
+# Loop through variables and make API requests
 for i, variable_set in enumerate(variables, start=1):
     # Construct the API request URL for each variable set
     query_url = f"{host}{year}{dataset_acronym}{g}{variable_set}{location}&key={usr_key}"
     # Use request package to call out to the API
     response = requests.get(query_url)
-    print(response.text)
+    # Store the response in the dictionary with a key
+    responses[f'response_{i}'] = response.json()
 
+with open('/input_path_here/census_responses.json', 'w') as json_file:
+    json.dump(responses, json_file, indent=4)
