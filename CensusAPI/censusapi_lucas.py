@@ -5,7 +5,9 @@ Created on Sat Mar  9 10:16:00 2024
 @author: tug03166
 """
 
-#dictionary for State abbreviation and FIPS code
+# dictionary for State abbreviation and FIPS code
+import json
+import requests
 states_fips = {
     "AL": "01",
     "AK": "02",
@@ -64,7 +66,6 @@ states_fips = {
 
 
 # census api
-import requests
 host = 'https://api.census.gov/data'
 year = '2019'
 dataset = 'acs/acs5/profile'
@@ -76,28 +77,31 @@ get_vars = [
     'DP04_0046PE'
 ]
 predicates["get"] = ",".join(get_vars)
+"for=tract:*"
 
 # Accepting input of state abbreviation
 state_abbreviation = input("Enter state abbreviation: ").upper()
 
 # Getting the associated FIPS state numeric code from the dictionary
 fips_code = states_fips.get(state_abbreviation)
-    
+
 # Checking if the state abbreviation is valid
 if fips_code:
-   # If valid, update the "for" predicate with the FIPS code
-   predicates["for"] = "state:{}".format(fips_code)
+    # If valid, update the "for" predicate with the FIPS code
+    predicates["for"] = "state:{}".format(fips_code)
 else:
     print("Invalid state abbreviation.")
 
 predicates["key"] = "7f2df7fc9c960f430ba9ff23d2f06738cb406056"
 r = requests.get(base_url, params=predicates)
 
+
 print(r.text)
-print(r.json()[0])
+#print(r.json()[0])
+
+# with open('C:/1_LUCAS/Application Development/CensusAPITesting/census_responses.json', 'w') as json_file:
+#    json.dump(responses, json_file, indent=4)
 
 #
-#import pandas as pd
-#df = pd.DataFrame(columns=col_names, data=r.json()[1:])
-
-
+# import pandas as pd
+# df = pd.DataFrame(columns=col_names, data=r.json()[1:])
