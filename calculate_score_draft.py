@@ -63,7 +63,7 @@ Greenspace
 
 Impervious Surfaces
 
-Heat Index
+Heat Map
 """
 
 #simulation physical data scores
