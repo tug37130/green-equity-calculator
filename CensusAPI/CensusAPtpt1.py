@@ -21,7 +21,7 @@ variables = [
 # API key - replace 'your_api_key' with your actual API key
 usr_key = "be105b6e77cfe811d4458d5070e3eaa163125b6d"
 
-dfs = {}  # Dictionary to store DataFrames
+dfs = []  # List to store DataFrames
 
 # Loop through variables and make API requests
 for variable in variables:
@@ -36,12 +36,20 @@ for variable in variables:
         df = pd.DataFrame(data[1:], columns=data[0])
         # Set tractID as index
         df.set_index('tract', inplace=True)
-        # Store DataFrame in the dictionary with variable name as key
-        dfs[variable] = df
+        # Store DataFrame in the list
+        dfs.append(df)
     else:
         print(f"Error fetching data for {variable}")
 
-# Print and check each DataFrame
-for variable, df in dfs.items():
-    print(f"DataFrame for {variable}:")
-    print(df)
+# Merge all DataFrames on 'tract' column
+merged_df = pd.concat(dfs, axis=1)
+
+# Remove duplicate 'state' and 'county' columns
+merged_df = merged_df.loc[:,~merged_df.columns.duplicated()]
+
+# Add new column "DISAD_INDEX" and set it to a calculation of the other fields
+merged_df['DISAD_INDEX'] = ((((merged_df['DP03_0119PE'].astype(float)/10) + (merged_df['DP02_0011PE'].astype(float)/10)) - ((merged_df['DP02_0068PE'].astype(float)/10) + (merged_df['DP04_0046PE'].astype(float)/10)))/4)
+
+# Print the merged DataFrame
+print("Merged DataFrame with DISAD_INDEX:")
+print(merged_df)
