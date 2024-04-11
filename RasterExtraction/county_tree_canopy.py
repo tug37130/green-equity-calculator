@@ -25,8 +25,8 @@ from shapely.geometry import box
 path = os.getcwd()
 print(path)
 #%%
+nlcd_file = rasterio.open('nlcd_tcc_conus_2021_v2021-4.tif')
 
-nlcd_file = 'nlcd_tcc_conus_2021_v2021-4.tif'
 
 tract_shapefile = 'tracts.shp'
 state_fips = input("Enter the FIPS code of the State: ")
@@ -46,30 +46,31 @@ Objects from this should be :
     1) nlcd_file - the raster dataset
     2) selected_tracts - gdf of tracts of selected county
 """
+#%%
+# operational File loading
+nlcd_file = rasterio.open('nlcd_tcc_conus_2021_v2021-4.tif')
+
+import CensusAPtpt1
+selected_tracts = final_gdf
 
 #%%
 # Masking function
 
-def visualize_tcc(nlcd_file, tracts):
-    # Loading Files
-    nlcd_dataset = rasterio.open(nlcd_file)
-
-    # Extract the geometry of the selected tract
-    geometry = tracts.geometry.values[0]
-
-    # Clip the NLCD dataset based on the geometry of the selected tract
-    clipped_nlcd, transform = mask(nlcd_dataset, [geometry], crop=True)
-    
-    return clipped_nlcd, transform
+def raster_clipper(raster, polygon):
+    # Extract the geometry of the polygon
+    geometry = polygon.geometry.values[0]
+    # Preform mask with raster and geometry of polygon arg
+    clipped_rast, transform = mask(raster, [geometry], crop=True)
+    return clipped_rast, transform
 
 # Usage:
-clip = visualize_tcc(nlcd_file, selected_tracts)
+clip = raster_clipper(nlcd_file, selected_tracts)
 
 # object 'clip' is a tuple that holds   nparray and Affine
     
 #%%
 # RECLASSIFY
-# Reclassify the data to a range of 1 to 100
+# Reclassify the nparray to a range of 1 to 100
 reclassified_data = np.interp(clip[0], (0, 255), (1, 100)).astype(np.uint8)
 # replace the nparray, updating clip object
 clip = (reclassified_data, clip[1])
@@ -78,7 +79,7 @@ clip = (reclassified_data, clip[1])
 # zonal stats expects files to be input. 
 # perhaps we write these files
 
-def write_clip_copy(input_file, output_file):
+def write_clip_copy(input_tuple, output_file):
     """
     Write clipped raster data to a GeoTIFF file.
     
@@ -87,7 +88,7 @@ def write_clip_copy(input_file, output_file):
         output_file (str): The name of the output GeoTIFF file.
     """
     # Extract data and transform from clip object
-    data, transform = input_file
+    data, transform = input_tuple
 
     # Specify the metadata for the output raster file
     metadata = {
@@ -114,9 +115,10 @@ clip_copy = "clip_copy.tif"
 # Now get MEAN value for the tract
 
 stats = gpd.GeoDataFrame(zonal_stats(selected_tracts, clip_copy, affine=clip_copy[1], stats='mean'))
-tracts_gdf = selected_tracts.join(stats)
-print(tracts_gdf.head(1))
-print(tracts_gdf.keys())
+selected_tracts = selected_tracts.join(stats)
+#print(selected_tracts.head(1))
+#print(selected_tracts.keys())
 
 #%%
 #delete the clip_copy.tif
+os.remove("clip_copy.tif")
