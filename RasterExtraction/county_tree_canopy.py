@@ -39,7 +39,7 @@ def tract_select(tract_shapefile, state_fips, county_fips):
     return selected_tracts
 
 selected_tracts = tract_select(tract_shapefile, state_fips, county_fips)
-#print(list(selected_tracts))
+print(list(selected_tracts))
 # PHL 42 101
 """
 Objects from this should be :
@@ -118,3 +118,5 @@ tracts_gdf = selected_tracts.join(stats)
 print(tracts_gdf.head(1))
 print(tracts_gdf.keys())
 
+#%%
+#delete the clip_copy.tif
