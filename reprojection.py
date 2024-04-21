@@ -20,6 +20,16 @@ def reproject_a_gdf(geopandas_df, epsg_code):
     return reprojected_df
 
 #%%
+def reproject_shp(input_shp, output_name, epsg_code):
+    gdf = gpd.read_file(input_shp)
+    if 'geometry' not in gdf.columns:
+            raise ValueError("Input DataFrame does not have a 'geometry' column.")
+    epsg = f'EPSG:{epsg_code}'
+    reprojected_df = geopandas_df.to_crs(epsg)
+
+    return reprojected_df
+
+#%%
 #REPROJECT RASTER
 #must reproject with with rasterio
 # nlcd currently crs:5070
