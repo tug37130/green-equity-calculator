@@ -1,16 +1,32 @@
 import requests
 import pandas as pd
 import geopandas as gpd
+import io
+import os
 
-def fetch_census_data(STATEFP, COUNTYFP, shapefile_path=None):
-    # Pull data using the Census API
+def fetch_census_data(statefp, countyfp, shapefile_path=None):
+    if shapefile_path:
+        gdf = gpd.read_file(shapefile_path)
+        geoid_column = next((col for col in gdf.columns if 'GEOID' in col), None)
+        if geoid_column:
+            gdf.rename(columns={geoid_column: 'GEOID'}, inplace=True)
+        else:
+            print("Error: GEOID column not found in the shapefile.")
+            return None
+
+        # Validate GEOID values
+        if not gdf['GEOID'].str.startswith(statefp.zfill(2) + countyfp.zfill(3)).all():
+            print("Error: Input state or county code does not match with shapefile GEOID.")
+            return None
+
+    # If the GEOID checks out, proceed with fetching data
     host = 'https://api.census.gov/data'
     year = '/2019'
     dataset_acronym = '/acs/acs5/profile'
     g = '?get='
-    location = f'&for=tract:*&in=state:{STATEFP}&in=county:{COUNTYFP}'
+    location = f'&for=tract:*&in=state:{statefp}&in=county:{countyfp}'
     variables = ['DP02_0011PE', 'DP02_0068PE', 'DP03_0119PE', 'DP04_0046PE']
-    usr_key = "API_KEY"  # Replace with API key
+    usr_key = "be105b6e77cfe811d4458d5070e3eaa163125b6d"
 
     dfs = []  # List to store DataFrames
 
@@ -23,8 +39,8 @@ def fetch_census_data(STATEFP, COUNTYFP, shapefile_path=None):
             headers = data[0][:-3]
             values = [row[:-3] for row in data[1:]]
             df = pd.DataFrame(values, columns=headers)
-            df['state'] = [row[-3] for row in data[1:]]
-            df['county'] = [row[-2] for row in data[1:]]
+            df['state'] = statefp
+            df['county'] = countyfp
             df['tract'] = [row[-1] for row in data[1:]]
             dfs.append(df)
         else:
@@ -35,22 +51,12 @@ def fetch_census_data(STATEFP, COUNTYFP, shapefile_path=None):
     merged_df['DISAD_INDEX'] = ((((merged_df['DP03_0119PE'].astype(float)/10) + (merged_df['DP02_0011PE'].astype(float)/10)) - ((merged_df['DP02_0068PE'].astype(float)/10) + (merged_df['DP04_0046PE'].astype(float)/10)))/4)
     merged_df['GEOID'] = merged_df['state'].astype(str) + merged_df['county'].astype(str) + merged_df['tract'].astype(str)
 
-    if shapefile_path:
-        # Load shapefile
-        gdf = gpd.read_file(shapefile_path)
-        # Detect and rename columns if needed
-        geoid_column = next((col for col in gdf.columns if 'GEOID' in col), 'GEOID')
-        gdf.rename(columns={geoid_column: 'GEOID'}, inplace=True)
-        for col, new_name in [('STATEFP', 'state'), ('COUNTYFP', 'county'), ('TRACTCE', 'tract')]:
-            original_column = next((c for c in gdf.columns if col in c), None)
-            if original_column:
-                gdf.rename(columns={original_column: new_name}, inplace=True)
-    else:
+    if not shapefile_path:
         # Fetch GeoJSON data if no shapefile is supplied
         base_url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_ACS2019/MapServer/8/query"
         params = {
             "f": "geojson",
-            "where": f"COUNTY='{COUNTYFP}' AND STATE='{STATEFP}'",
+            "where": f"COUNTY='{countyfp}' AND STATE='{statefp}'",
             "outFields": "TRACT,GEOID",
             "returnGeometry": True,
             "outSR": 4326
@@ -59,17 +65,9 @@ def fetch_census_data(STATEFP, COUNTYFP, shapefile_path=None):
         if response.status_code == 200:
             geojson_data = response.json()
             gdf = gpd.GeoDataFrame.from_features(geojson_data, crs='EPSG:4326')
-
-    if 'GEOID' not in gdf.columns or 'GEOID' not in merged_df.columns:
-        print("Error: 'GEOID' column missing in one of the dataframes.")
-        return None
+        else:
+            print("Error fetching GeoJSON data.")
+            return None
 
     final_gdf = gdf.merge(merged_df, on='GEOID', how='left')
     return final_gdf
-
-# Usage example
-STATEFP = '42'  # Pennsylvania
-COUNTYFP = '101'  # Philadelphia County
-# shapefile_path = "C:/Users/......"
-final_gdf = fetch_census_data(STATEFP, COUNTYFP)
-# print(final_gdf) # Print to view results (not necessary)
