@@ -17,7 +17,7 @@ def reproject_a_gdf(geopandas_df, epsg_code):
     epsg = f'EPSG:{epsg_code}'
     reprojected_df = geopandas_df.to_crs(epsg)
 
-    return reprojected_df
+    return reprojected_df as output_name
 
 #%%
 def reproject_shp(input_shp, output_name, epsg_code):
@@ -27,7 +27,7 @@ def reproject_shp(input_shp, output_name, epsg_code):
     epsg = f'EPSG:{epsg_code}'
     reprojected_df = geopandas_df.to_crs(epsg)
 
-    return reprojected_df
+    return reprojected_df as output_name
 
 #%%
 #REPROJECT RASTER
