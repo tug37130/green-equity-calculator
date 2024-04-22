@@ -81,7 +81,7 @@ def reproject_raster(input_raster_file, output_raster_file, epsg_code):
 nlcd_file = 'nlcd_tcc_conus_2021_v2021-4.tif'
 output_file = 'raster_reprojected.tif'
 epsg_code = '4236'
-reproject_raster(nlcd_file, output_file)
+reproject_raster(nlcd_file, output_file, epsg_code)
 
 #%%
 print(gpd.read_file('tracts.shp').crs)

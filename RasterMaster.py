@@ -5,12 +5,7 @@ import numpy as np
 from rasterio.mask import mask
 from rasterstats import zonal_stats
 
-'''
-def tract_select(tract_shapefile, state_fips, county_fips):
     tract_gdf = gpd.read_file(tract_shapefile)
-    selected_tracts = tract_gdf[(tract_gdf['STATEFP'] == state_fips) & (tract_gdf['COUNTYFP'] == county_fips)]
-    return selected_tracts
-'''
 def raster_clipper(raster, polygon):
     geometry = polygon.geometry.values[0]
     clipped_rast, transform = mask(raster, [geometry], crop=True)
@@ -44,7 +39,8 @@ def main_func(raster, poly, epsg_code):
     clip_copy = "clip_copy.tif"
 
     stats = gpd.GeoDataFrame(zonal_stats(selected_tracts, clip_copy, affine=clip[1], stats='mean'))
-    selected_tracts = selected_tracts.join(stats)
-    print(selected_tracts.head(1))
+    final_gdf = selected_tracts.join(stats)
+    return final_gdf
+    #print(selected_tracts.head(1))
 
 
