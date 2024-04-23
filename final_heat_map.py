@@ -18,7 +18,7 @@ from rasterio.transform import from_bounds
 import odc.stac
 import os
 from census_requests import fetch_census_data
-
+#%%
 # statefp = "42"
 # countyfp = "101"
 
@@ -55,7 +55,7 @@ def find_least_cloudy_item(catalog_url, bbox, time_range, collections):
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
-
+#%%
 # Connect to the STAC catalog and search for items within the time and area of interest
 catalog_url = "https://planetarycomputer.microsoft.com/api/stac/v1"
 collections_of_interest = ["landsat-c2-l2"]
@@ -67,7 +67,7 @@ if selected_item:
         f"Choosing {selected_item.id} from {selected_item.datetime.date()}"
         + f" with {selected_item.properties.get('eo:cloud_cover', 'N/A')}% cloud cover"
     )
-
+#%%
 def load_band_data(selected_item, bands_of_interest, bbox_of_interest):
     data = odc.stac.stac_load(
         [selected_item], bands=bands_of_interest, bbox=bbox_of_interest
@@ -145,7 +145,7 @@ def extract_temp_write_shapefile(inraster, shpfile, output_shp_res):
                           'geometry': geom
                           })
 
-
+#%%
 # usage
 # statefp = "34"
 # countyfp = "013"
