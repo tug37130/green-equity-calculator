@@ -59,7 +59,7 @@ def fetch_census_data(statefp, countyfp, shapefile_path=None):
             "where": f"COUNTY='{countyfp}' AND STATE='{statefp}'",
             "outFields": "TRACT,GEOID",
             "returnGeometry": True,
-            "outSR": 4326
+            "outSR": 5070
         }
         response = requests.get(base_url, params=params)
         if response.status_code == 200:
