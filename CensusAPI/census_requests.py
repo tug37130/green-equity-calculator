@@ -64,10 +64,16 @@ def fetch_census_data(statefp, countyfp, shapefile_path=None):
         response = requests.get(base_url, params=params)
         if response.status_code == 200:
             geojson_data = response.json()
-            gdf = gpd.GeoDataFrame.from_features(geojson_data, crs='EPSG:4326')
+            gdf = gpd.GeoDataFrame.from_features(geojson_data, crs='EPSG:5070')
         else:
             print("Error fetching GeoJSON data.")
             return None
 
     final_gdf = gdf.merge(merged_df, on='GEOID', how='left')
-    return final_gdf
+
+        # Extract bounding box values from final_gdf
+    bbox_values = final_gdf.total_bounds
+
+    # Format the bounding box values as [minx, miny, maxx, maxy]
+    bbox_of_interest = [bbox_values[0], bbox_values[1], bbox_values[2], bbox_values[3]]
+    return final_gdf, bbox_of_interest
