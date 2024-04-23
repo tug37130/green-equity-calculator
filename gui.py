@@ -19,8 +19,7 @@ import numpy as np
 from rasterio.mask import mask
 from rasterstats import zonal_stats
 ########
-from reprojection import reproject_a_gdf
-from reprojection import reproject_raster
+
 
 # Function for inputs the number only and limiting length
 def numeric_input(text, max_length):
@@ -83,7 +82,7 @@ def submit():
     # Fetch Census data
     final_gdf = fetch_census_data(statefp, countyfp, shapefile_path)
     if final_gdf is not None:
-        print(final_gdf.head(1)) # Print to view results (not necessary)
+        print(final_gdf) # Print to view results (not necessary)
         # Write recommendations to PlantRecommendation.txt
         write_txt(statefp)
         # Display the content of PlantRecommendation.txt
