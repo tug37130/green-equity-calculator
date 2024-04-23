@@ -17,89 +17,13 @@ from rasterio.mask import mask
 from rasterio.transform import from_bounds
 import odc.stac
 import os
+from census_requests import fetch_census_data
 
-
-
-def fetch_census_data(statefp, countyfp, shapefile_path=None):
-    if shapefile_path:
-        gdf = gpd.read_file(shapefile_path)
-        geoid_column = next((col for col in gdf.columns if 'GEOID' in col), None)
-        if geoid_column:
-            gdf.rename(columns={geoid_column: 'GEOID'}, inplace=True)
-        else:
-            print("Error: GEOID column not found in the shapefile.")
-            return None
-
-        # Validate GEOID values
-        if not gdf['GEOID'].str.startswith(statefp.zfill(2) + countyfp.zfill(3)).all():
-            print("Error: Input state or county code does not match with shapefile GEOID.")
-            return None
-
-    # If the GEOID checks out, proceed with fetching data
-    host = 'https://api.census.gov/data'
-    year = '/2019'
-    dataset_acronym = '/acs/acs5/profile'
-    g = '?get='
-    location = f'&for=tract:*&in=state:{statefp}&in=county:{countyfp}'
-    variables = ['DP02_0011PE', 'DP02_0068PE', 'DP03_0119PE', 'DP04_0046PE']
-    usr_key = "be105b6e77cfe811d4458d5070e3eaa163125b6d"
-
-    dfs = []  # List to store DataFrames
-
-    for variable in variables:
-        query_url = f"{host}{year}{dataset_acronym}{g}{variable}{location}&key={usr_key}"
-        response = requests.get(query_url)
-        if response.status_code == 200:
-            data = response.json()
-            # Ensure columns and data match
-            headers = data[0][:-3]
-            values = [row[:-3] for row in data[1:]]
-            df = pd.DataFrame(values, columns=headers)
-            df['state'] = statefp
-            df['county'] = countyfp
-            df['tract'] = [row[-1] for row in data[1:]]
-            dfs.append(df)
-        else:
-            print(f"Error fetching data for {variable}")
-
-    merged_df = pd.concat(dfs, axis=1)
-    merged_df = merged_df.loc[:,~merged_df.columns.duplicated()]
-    merged_df['DISAD_INDEX'] = ((((merged_df['DP03_0119PE'].astype(float)/10) + (merged_df['DP02_0011PE'].astype(float)/10)) - ((merged_df['DP02_0068PE'].astype(float)/10) + (merged_df['DP04_0046PE'].astype(float)/10)))/4)
-    merged_df['GEOID'] = merged_df['state'].astype(str) + merged_df['county'].astype(str) + merged_df['tract'].astype(str)
-
-    if not shapefile_path:
-        # Fetch GeoJSON data if no shapefile is supplied
-        base_url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_ACS2019/MapServer/8/query"
-        params = {
-            "f": "geojson",
-            "where": f"COUNTY='{countyfp}' AND STATE='{statefp}'",
-            "outFields": "TRACT,GEOID",
-            "returnGeometry": True,
-            "outSR": 4326
-        }
-        response = requests.get(base_url, params=params)
-        if response.status_code == 200:
-            geojson_data = response.json()
-            gdf = gpd.GeoDataFrame.from_features(geojson_data, crs='EPSG:4326')
-        else:
-            print("Error fetching GeoJSON data.")
-            return None
-
-    final_gdf = gdf.merge(merged_df, on='GEOID', how='left')
-
-    # Extract bounding box values from final_gdf
-    bbox_values = final_gdf.total_bounds
-
-    # Format the bounding box values as [minx, miny, maxx, maxy]
-    bbox_of_interest = [bbox_values[0], bbox_values[1], bbox_values[2], bbox_values[3]]
-    return final_gdf, bbox_of_interest
-
-statefp = "42"
-countyfp = "101"
+# statefp = "42"
+# countyfp = "101"
 
 # Call the fetch_census_data function
-final_gdf, bbox_of_interest = fetch_census_data(statefp, countyfp)
-
+# final_gdf, bbox_of_interest = fetch_census_data(statefp, countyfp)
 
 def find_least_cloudy_item(catalog_url, bbox, time_range, collections):
     try:
@@ -223,8 +147,8 @@ def extract_temp_write_shapefile(inraster, shpfile, output_shp_res):
 
 
 # usage
-statefp = "34"
-countyfp = "013"
+# statefp = "34"
+# countyfp = "013"
 # Call the fetch_census_data function
 final_gdf, bbox_of_interest = fetch_census_data(statefp, countyfp)
 # Load and process temperature data
@@ -233,8 +157,7 @@ data = load_band_data(selected_item, bands_of_interest, bbox_of_interest)
 band_name = "lwir"
 band_info = get_band_info(selected_item, band_name)
 celsius_data = convert_temperature(data["lwir"], band_info)
-# Save temperature data as a GeoTIFF
-folder = "C:\\Users\\tur08893\\Bigdata\\Microsoft_api\\temp-landsat\\"
+# Save temperature data as a GeoTFF
 temp_raster_file = "temperature.tif"
 crs_epsg = 4326  # Assuming EPSG:4326 for the CRS
 save_temperature_raster(temp_raster_file, celsius_data, bbox_of_interest, crs_epsg)
@@ -247,7 +170,7 @@ clip_create_mask_layer(temp_raster_file, shpfile, clipped_masked_raster)
 # Extract temperature data for each Census tract in final_gdf
 output_shp_res = 'temperature_Census-tract.shp'
 extract_temp_write_shapefile(clipped_masked_raster, shpfile, output_shp_res)
-output_path1 = os.path.join(folder,temp_raster_file)
-output_path2 = os.path.join(folder,shpfile)
-output_path3 = os.path.join(folder,clipped_masked_raster)
-output_path4 = os.path.join(folder,output_shp_res)
+output_path1 = os.path.join(output_folder,temp_raster_file)
+output_path2 = os.path.join(output_folder,shpfile)
+output_path3 = os.path.join(output_folder,clipped_masked_raster)
+output_path4 = os.path.join(output_folder,output_shp_res)
