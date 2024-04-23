@@ -32,26 +32,30 @@ def find_least_cloudy_item(catalog_url, bbox, time_range, collections):
             catalog_url,
             modifier=planetary_computer.sign_inplace,
         )
-        
+
         # Search for items based on criteria
         search = catalog.search(
-            collections=collections,
-            bbox=bbox,
-            datetime=time_range,
-            query={"eo:cloud_cover": {"lt": 10}},
+            collections=["landsat-c2-l2"],
+            bbox=bbox_of_interest,
+            datetime=time_of_interest,
+            query={
+                "eo:cloud_cover": {"lt": 10},
+                "platform": {"in": ["landsat-8", "landsat-9"]},
+            },
         )
-        
+        items = search.get_all_items()
+        print(f"Returned {len(items)} Items")
         # Get the item collection
         items = search.item_collection()
-        
+
         if len(items) == 0:
             raise ValueError("No items found matching the criteria.")
-        
+
         # Find the least cloudy item
         selected_item = min(items, key=lambda item: item.properties.get("eo:cloud_cover", float("inf")))
-        
+
         return selected_item
-    
+
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
@@ -152,11 +156,11 @@ def extract_temp_write_shapefile(inraster, shpfile, output_shp_res):
 # Call the fetch_census_data function
 final_gdf, bbox_of_interest = fetch_census_data(statefp, countyfp)
 # Load and process temperature data
-bands_of_interest = ["lwir"]
+bands_of_interest = ["lwir11"]
 data = load_band_data(selected_item, bands_of_interest, bbox_of_interest)
-band_name = "lwir"
+band_name = "lwir11"
 band_info = get_band_info(selected_item, band_name)
-celsius_data = convert_temperature(data["lwir"], band_info)
+celsius_data = convert_temperature(data["lwir11"], band_info)
 # Save temperature data as a GeoTFF
 temp_raster_file = "temperature.tif"
 crs_epsg = 4326  # Assuming EPSG:4326 for the CRS
