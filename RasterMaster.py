@@ -11,9 +11,9 @@ def raster_clipper(raster, polygon, epsg_code):
        print('didnt work')
     else:
        print('worked')
-    
+    raster_opened = rasterio.open(raster)
     geometry = polygon.geometry.values[0]
-    clipped_rast, transform = mask(raster, [geometry], crop=True)
+    clipped_rast, transform = mask(raster_opened, [geometry], crop=True)
     return clipped_rast, transform
 
 def write_clip_copy(input_tuple, output_file, epsg_code):

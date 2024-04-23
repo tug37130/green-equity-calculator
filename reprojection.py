@@ -16,7 +16,7 @@ def reproject_a_gdf(geopandas_df, epsg_code):
             raise ValueError("Input DataFrame does not have a 'geometry' column.")
     epsg = f'EPSG:{epsg_code}'
     reprojected_df = geopandas_df.to_crs(epsg)
-
+    print('success')
     return reprojected_df
 
 #%%
@@ -37,7 +37,7 @@ def reproject_shp(input_shp, output_name, epsg_code):
 
 def reproject_raster(input_raster_file, output_raster_file, epsg_code):
     """
-    Reprojects a raster file to EPSG:4326.
+    Reprojects a raster file to EPSG:X.
 
     Parameters:
     input_raster_file (str): Path to the input raster file.
@@ -50,7 +50,7 @@ def reproject_raster(input_raster_file, output_raster_file, epsg_code):
     with rasterio.open(input_raster_file) as src:
         # Define the new CRS you want to change to
         dst_crs = f'EPSG:{epsg_code}'
-
+        
         # Calculate the transform and dimensions for the new CRS
         transform, width, height = calculate_default_transform(
             src.crs, dst_crs, src.width, src.height, *src.bounds)

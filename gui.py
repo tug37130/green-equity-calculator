@@ -18,7 +18,7 @@ import numpy as np
 from rasterio.mask import mask
 from rasterstats import zonal_stats
 ########
-from reprojection import reproject_shp
+from reprojection import reproject_a_gdf
 from reprojection import reproject_raster
 
 # Function for inputs the number only and limiting length
@@ -70,29 +70,33 @@ def display_recommendation():
 
 # Function for submit button
 def submit():
-    STATEFP = statefp_entry.get()
-    COUNTYFP = countyfp_entry.get()
+    statefp = statefp_entry.get()
+    countyfp = countyfp_entry.get()
     shapefile_path = census_tract_entry.get()
+    
     ######## EPSG code
     epsg_code = epsg_entry.get()
+    nlcd_file = nlcd_entry.get()
+    nlcd2_file = nlcd2_entry.get()
     
     # Fetch Census data
-    final_gdf = fetch_census_data(STATEFP, COUNTYFP, shapefile_path)
+    final_gdf = fetch_census_data(statefp, countyfp, shapefile_path)
     if final_gdf is not None:
         print(final_gdf) # Print to view results (not necessary)
         # Write recommendations to PlantRecommendation.txt
-        write_txt(STATEFP)
+        write_txt(statefp)
         # Display the content of PlantRecommendation.txt
         display_recommendation()
     else:
         # Handle error or display message
         pass
-
-    ########
-    main_func(nlcd_entry, final_gdf, epsg_code)
+    
+    #reproject_a_gdf(final_gdf)
     
     ########
-    main_func(nlcd2_entry, final_gdf, epsg_code)
+    main_func(nlcd_file, final_gdf, epsg_code)
+    ########
+    main_func(nlcd2_file, final_gdf, epsg_code)
 
 # Create the MAIN window for user input
 window = tk.Tk()
