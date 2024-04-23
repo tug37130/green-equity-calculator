@@ -78,6 +78,7 @@ def reproject_raster(input_raster_file, output_raster_file, epsg_code):
 
 #%%
 # Example usage:
+'''
 nlcd_file = 'nlcd_tcc_conus_2021_v2021-4.tif'
 output_file = 'raster_reprojected.tif'
 epsg_code = '4236'
@@ -92,3 +93,4 @@ print (crs.toProj4())
 
 # should let user choose projection
 # should let user name output file
+'''

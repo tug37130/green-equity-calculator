@@ -113,7 +113,7 @@ epsg_var = tk.StringVar()
 epsg_entry = tk.Entry(window, textvariable=epsg_var)
 
 # NLCD
-nlcd_label = tk.Label(window, text="NLCD TIF File:")
+nlcd_label = tk.Label(window, text="NLCD Tree Canopy File:")
 nlcd_entry = tk.Entry(window, width=40)
 browse_nlcd_button = tk.Button(window, text="Browse", command=browse_nlcd_file)
 

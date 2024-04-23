@@ -5,8 +5,13 @@ import numpy as np
 from rasterio.mask import mask
 from rasterstats import zonal_stats
 
-    tract_gdf = gpd.read_file(tract_shapefile)
-def raster_clipper(raster, polygon):
+def raster_clipper(raster, polygon, epsg_code):
+    
+    if epsg_code == True:
+       print('didnt work')
+    else:
+       print('worked')
+    
     geometry = polygon.geometry.values[0]
     clipped_rast, transform = mask(raster, [geometry], crop=True)
     return clipped_rast, transform
@@ -31,7 +36,7 @@ def main_func(raster, poly, epsg_code):
     
     selected_tracts = poly
 
-    clip = raster_clipper(raster, selected_tracts)
+    clip = raster_clipper(raster, selected_tracts, epsg_code)
     reclassified_data = np.interp(clip[0], (0, 255), (1, 100)).astype(np.uint8)
     clip = (reclassified_data, clip[1])
 
@@ -42,5 +47,9 @@ def main_func(raster, poly, epsg_code):
     final_gdf = selected_tracts.join(stats)
     return final_gdf
     #print(selected_tracts.head(1))
-
-
+'''
+raster = 'C:/1_LUCAS/Application Development/NLCDyesh/yesh data/nlcd_tcc_conus_2021_v2021-4.tif'
+polygon = 'C:/1_LUCAS/Application Development/NLCDyesh/yesh data/c16590ca-5adf-4332-aaec-9323b2fa7e7d2020328-1-1jurugw.pr6w.dbf'
+epsg_code = '2272'
+raster_clipper(raster,polygon,epsg_code)
+'''
