@@ -82,7 +82,7 @@ def submit():
     # Fetch Census data
     final_gdf = fetch_census_data(statefp, countyfp, shapefile_path)
     if final_gdf is not None:
-        print(final_gdf) # Print to view results (not necessary)
+        print(final_gdf.head(1)) # Print to view results (not necessary)
         # Write recommendations to PlantRecommendation.txt
         write_txt(statefp)
         # Display the content of PlantRecommendation.txt
@@ -95,8 +95,9 @@ def submit():
     
     ########
     main_func(nlcd_file, final_gdf, epsg_code)
+    print(final_gdf.head(1))
     ########
-    main_func(nlcd2_file, final_gdf, epsg_code)
+    #main_func(nlcd2_file, final_gdf, epsg_code)
 
 # Create the MAIN window for user input
 window = tk.Tk()
@@ -113,8 +114,8 @@ countyfp_entry = tk.Entry(window, validate="key", validatecommand=(window.regist
 
 ######### EPSG
 epsg_label = tk.Label(window, text="EPSG Code:")
-epsg_var = tk.StringVar()
-epsg_entry = tk.Entry(window, textvariable=epsg_var)
+#epsg_var = tk.StringVar()
+epsg_entry = tk.Entry(window, validate="key", validatecommand=(window.register(lambda text: numeric_input(text, 4)), '%P'))
 
 # NLCD
 nlcd_label = tk.Label(window, text="NLCD Tree Canopy File:")

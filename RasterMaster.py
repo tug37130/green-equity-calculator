@@ -40,11 +40,12 @@ def main_func(raster, poly, epsg_code):
     reclassified_data = np.interp(clip[0], (0, 255), (1, 100)).astype(np.uint8)
     clip = (reclassified_data, clip[1])
 
-    write_clip_copy(clip, "clip_copy.tif")
+    write_clip_copy(clip, "clip_copy.tif", epsg_code)
     clip_copy = "clip_copy.tif"
 
     stats = gpd.GeoDataFrame(zonal_stats(selected_tracts, clip_copy, affine=clip[1], stats='mean'))
     final_gdf = selected_tracts.join(stats)
+    print('Tree canopy data attached!')
     return final_gdf
     #print(selected_tracts.head(1))
 '''
