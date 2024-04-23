@@ -64,7 +64,7 @@ def fetch_census_data(statefp, countyfp, shapefile_path=None):
         response = requests.get(base_url, params=params)
         if response.status_code == 200:
             geojson_data = response.json()
-            gdf = gpd.GeoDataFrame.from_features(geojson_data, crs='EPSG:4326')
+            gdf = gpd.GeoDataFrame.from_features(geojson_data, crs='EPSG:5070')
         else:
             print("Error fetching GeoJSON data.")
             return None
