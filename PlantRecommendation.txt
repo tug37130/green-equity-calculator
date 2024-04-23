@@ -1,25 +1,25 @@
-Recommended Plants for State FIPS Code 42
+Recommended Plants for State FIPS Code 06
 ================================
 
-Region: Mid-Atlantic
+Region: California
 
 Trees:
-- American Sweetgum: Liquidambar styraciflua
-- Washington Hawthorn: Crataegus phaenopyrum
-- American Hornbeam: Carpinus caroliniana
-- Japanese Tree Lilac: Syringa reticulata
-- Eastern White Pine: Pinus strobus
+- California Sycamore: Platanus racemosa
+- Coast Live Oak: Quercus agrifolia
+- Chinese Pistache: Pistacia chinensis
+- Jacaranda: Jacaranda mimosifolia
+- Southern California Black Walnut: Juglans californica
 
 Wetland Plants:
-- Buttonbush: Cephalanthus occidentalis
-- Cardinal Flower: Lobelia cardinalis
-- Joe-Pye Weed: Eutrochium spp.
-- Sensitive Fern: Onoclea sensibilis
-- Bog Goldenrod: Solidago uliginosa
+- Marsh Cinquefoil: Potentilla palustris
+- Western Blue Flag: Iris missouriensis
+- Broadleaf Cattail: Typha latifolia
+- California Blackberry: Rubus ursinus
+- California Bulrush: Schoenoplectus californicus
 
 Wildflowers:
-- Mayapple: Podophyllum peltatum
-- Virginia Bluebells: Mertensia virginica
-- Celandine Poppy: Stylophorum diphyllum
-- Cardinal Flower: Lobelia cardinalis
-- Wild Columbine: Aquilegia canadensis
+- California Poppy: Eschscholzia californica
+- California Lilac: Ceanothus spp.
+- California Lupine: Lupinus spp.
+- Farewell-to-Spring: Clarkia amoena
+- Wild Hyacinth: Dichelostemma capitatum
