@@ -94,8 +94,9 @@ def submit():
     #reproject_a_gdf(final_gdf)
     
     ########
-    main_func(nlcd_file, final_gdf, epsg_code)
-    print(final_gdf.head(1))
+    final_gdf = main_func(nlcd_file, final_gdf, epsg_code)
+    print(final_gdf)
+    
     ########
     #main_func(nlcd2_file, final_gdf, epsg_code)
 

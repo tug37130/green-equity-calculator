@@ -44,6 +44,8 @@ def main_func(raster, poly, epsg_code):
     clip_copy = "clip_copy.tif"
 
     stats = gpd.GeoDataFrame(zonal_stats(selected_tracts, clip_copy, affine=clip[1], stats='mean'))
+    #final_gdf = selected_tracts.merge(stats['mean'],  how='left', on='geometry')
+    
     final_gdf = selected_tracts.join(stats)
     print('Tree canopy data attached!')
     return final_gdf
