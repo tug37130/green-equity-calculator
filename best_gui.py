@@ -7,7 +7,6 @@ import pandas as pd
 import geopandas as gpd
 from plant_recommendation import write_txt
 from census_requests import fetch_census_data
-from final_heat_map import fetch_census_data, find_least_cloudy_item, load_band_data, get_band_info, convert_temperature, save_temperature_raster, clip_create_mask_layer, extract_temp_write_shapefile
 ######## NLCD imports
 from RasterMaster import raster_clipper
 from RasterMaster import write_clip_copy
@@ -17,6 +16,7 @@ import numpy as np
 from rasterio.mask import mask
 from rasterstats import zonal_stats
 # Heat 
+from final_heat_map import fetch_census_data, find_least_cloudy_item, load_band_data, get_band_info, convert_temperature, save_temperature_raster, clip_create_mask_layer, extract_temp_write_shapefile
 import pystac_client
 import fiona
 import planetary_computer
