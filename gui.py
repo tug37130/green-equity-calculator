@@ -83,6 +83,7 @@ def submit():
     final_gdf = fetch_census_data(statefp, countyfp, shapefile_path)
     if final_gdf is not None:
         print(final_gdf.head(1)) # Print to view results (not necessary)
+        print(final_gdf.total_bounds)
         # Write recommendations to PlantRecommendation.txt
         write_txt(statefp)
         # Display the content of PlantRecommendation.txt
@@ -96,6 +97,7 @@ def submit():
     ########
     final_gdf = main_func(nlcd_file, final_gdf, epsg_code)
     print(final_gdf)
+    final_gdf.to_file('temp.shp')
     
     ########
     #main_func(nlcd2_file, final_gdf, epsg_code)
