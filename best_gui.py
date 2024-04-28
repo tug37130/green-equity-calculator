@@ -8,9 +8,9 @@ import geopandas as gpd
 from plant_recommendation import write_txt
 from census_requests import fetch_census_data
 ######## NLCD imports
-from RasterMaster import raster_clipper
-from RasterMaster import write_clip_copy
-from RasterMaster import main_func
+from nlcd_master import raster_clipper
+from nlcd_master import write_clip_copy
+from nlcd_master import nlcd_attacher
 import rasterio
 import numpy as np
 from rasterio.mask import mask
@@ -126,12 +126,12 @@ def submit():
     
     ########
     # Tree Canopy
-    final_gdf = main_func(nlcd_file, final_gdf, epsg_code)
+    final_gdf = nlcd_attacher(nlcd_file, final_gdf, epsg_code)
     print(final_gdf)
     
     ########
     # Impervious Surfaces
-    #main_func(nlcd2_file, final_gdf, epsg_code)
+    #final_gdf = nlcd_attacher(nlcd2_file, final_gdf, epsg_code)
 
     #### HEAT
     # Call the fetch_census_data function

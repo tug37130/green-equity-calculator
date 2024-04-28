@@ -6,17 +6,18 @@ from rasterio.mask import mask
 from rasterstats import zonal_stats
 
 def raster_clipper(raster, polygon, epsg_code):
-    
-    if epsg_code == True:
-       print('didnt work')
-    else:
-       print('worked')
+    # opens raster input in rasterio
+    # pulls geometry from polygon input
+    # mask method using these two inputs
+    # returns a tuple of the new raster information. 
     raster_opened = rasterio.open(raster)
     geometry = polygon.geometry.values[0]
     clipped_rast, transform = mask(raster_opened, [geometry], crop=True)
     return clipped_rast, transform
 
 def write_clip_copy(input_tuple, output_file, epsg_code):
+    # a direct raster file must be used for zonal_stats, which this creates.
+    # takes input tuple and writes an output.
     data, transform = input_tuple
     metadata = {
         "driver": "GTiff",
@@ -32,22 +33,26 @@ def write_clip_copy(input_tuple, output_file, epsg_code):
     print(f"Clipped raster saved to {output_file}")
 
 
-def main_func(raster, poly, epsg_code):
-    
-    selected_tracts = poly
-
-    clip = raster_clipper(raster, selected_tracts, epsg_code)
+def nlcd_attacher(raster, poly, epsg_code):
+    # inputs a direct raster file, a polygon file, and epsg code
+    # runs 'raster_clipper', saves output as 'clip' object
+    # reclassifies data in clip as 1-100
+    # writes "clip_copy.tif" to save changes and for use in zonal_stats
+    # mean value of each poly from raster with zonal_stats
+    #   then saved as 'stats' object, a geodataframe 
+    # rename as final_gdf and return
+    clip = raster_clipper(raster, poly, epsg_code)
     reclassified_data = np.interp(clip[0], (0, 255), (1, 100)).astype(np.uint8)
     clip = (reclassified_data, clip[1])
 
     write_clip_copy(clip, "clip_copy.tif", epsg_code)
     clip_copy = "clip_copy.tif"
 
-    stats = gpd.GeoDataFrame(zonal_stats(selected_tracts, clip_copy, affine=clip[1], stats='mean'))
+    stats = gpd.GeoDataFrame(zonal_stats(poly, clip_copy, affine=clip[1], stats='mean'))
     #final_gdf = selected_tracts.merge(stats['mean'],  how='left', on='geometry')
     
-    final_gdf = selected_tracts.join(stats)
-    print('Tree canopy data attached!')
+    final_gdf = poly.join(stats)
+    print('NLCD field attached!')
     return final_gdf
     #print(selected_tracts.head(1))
 '''
