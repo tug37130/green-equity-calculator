@@ -1,24 +1,24 @@
 # identify where user's study area is.
 # if x state = y region 
 # from wildflower data dictionary 
-def check_state(STATEFP):
-    if STATEFP in ["09", "23", "25", "33", "36", "44", "50"]:
+def check_state(statefp):
+    if statefp in ["09", "23", "25", "33", "36", "44", "50"]:
         return "Northeast"
-    elif STATEFP in ["10", "21", "24", "34", "39", "42", "51", "54"]:
+    elif statefp in ["10", "21", "24", "34", "39", "42", "51", "54"]:
         return "Mid-Atlantic"
-    elif STATEFP in ["01", "05", "12", "13", "22", "28", "37", "45", "47"]:
+    elif statefp in ["01", "05", "12", "13", "22", "28", "37", "45", "47"]:
         return "Southeast"
-    elif STATEFP in ["17", "18", "20", "19", "26", "27", "29", "31", "38", "46", "55"]:
+    elif statefp in ["17", "18", "20", "19", "26", "27", "29", "31", "38", "46", "55"]:
         return "Midwest"
-    elif STATEFP in ["08", "16", "30", "32", "49", "56"]:
+    elif statefp in ["08", "16", "30", "32", "49", "56"]:
         return "Rocky Mountain"
-    elif STATEFP in ["04", "35", "40", "48"]:
+    elif statefp in ["04", "35", "40", "48"]:
         return "Southwest"
-    elif STATEFP in ["02", "41", "53"]:
+    elif statefp in ["02", "41", "53"]:
         return "Northwest"
-    elif STATEFP in ["06"]:
+    elif statefp in ["06"]:
         return "California"
-    elif STATEFP in ["15"]:
+    elif statefp in ["15"]:
         return "Hawaii"
     else:
         return "Invalid input. Please input a 2 digits State FIPS code."
@@ -310,8 +310,8 @@ def recommended_wildflowers():
 
 ########
 # actual function to be utilized
-def recommended_plants(STATEFP):
-    region = check_state(STATEFP)
+def recommended_plants(statefp):
+    region = check_state(statefp)
     if region == "Invalid input. Please select a US State.":
         return region
     
@@ -326,14 +326,14 @@ def recommended_plants(STATEFP):
 
 ###
 # output written to a PlantRecommendation.txt
-def write_txt(STATEFP):
+def write_txt(statefp):
     # Call recommended_plants() to get recommendations
-    recommendations = recommended_plants(STATEFP)
+    recommendations = recommended_plants(statefp)
     
     # Create or open PlantRecommendation.txt in write mode
     with open("PlantRecommendation.txt", "w") as f:
         # Write recommendations to PlantRecommendation.txt
-        f.write("Recommended Plants for State FIPS Code {}\n".format(STATEFP))
+        f.write("Recommended Plants for State FIPS Code {}\n".format(statefp))
         f.write("================================\n\n")
         
         f.write("Region: {}\n\n".format(recommendations["Region"]))
