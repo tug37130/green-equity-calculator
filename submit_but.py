@@ -21,10 +21,11 @@ import geopandas as gpd
 import numpy as np
 from rasterio.mask import mask
 from rasterstats import zonal_stats
+# temperature
+from final_heat_map import *
 
 
-
-def submit_button_func(statefp, countyfp, nlcd_file, shapefile_path=None):
+def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path=None):
     
     # Fetch Census data
     final_gdf = fetch_census_data(statefp, countyfp, shapefile_path)
@@ -41,4 +42,8 @@ def submit_button_func(statefp, countyfp, nlcd_file, shapefile_path=None):
     
     # Impervious data
     #final_gdf = nlcd_attacher(nlcd2_file, final_gdf, epsg_code)
+    
+    # Heat data
+    write_attach_temp(final_gdf, output_folder)
+    
     

@@ -8,10 +8,7 @@ import pandas as pd
 import geopandas as gpd
 from plant_recommendation import write_txt
 from census_requests import fetch_census_data
-######## NLCD imports
-from RasterMaster import raster_clipper
-from RasterMaster import write_clip_copy
-from RasterMaster import main_func
+
 import os
 import rasterio
 import geopandas as gpd
@@ -73,14 +70,23 @@ def submit():
     nlcd_file = nlcd_entry.get()
     #nlcd2_file = nlcd2_entry.get()
     
-    # ? = final_gdf ?
-    submit_button_func(statefp, countyfp, nlcd_file, shapefile_path)
-   
-    # Write recommendations to PlantRecommendation.txt
-    write_txt(statefp)
-    # Display the content of PlantRecommendation.txt
-    display_recommendation()
+    # output folder
+    output_folder = filedialog.askdirectory()
+    if output_folder:
+       # Generate plant recommendations and write to file in the chosen folder
+       write_txt(statefp)
     
+       # Show plant recommendations
+       display_recommendation()
+    
+       # Show a message box indicating successful completion
+       tk.messagebox.showinfo("Info", "Processing complete. Output files saved in {}".format(output_folder))
+
+    submit_button_func(statefp, countyfp, nlcd_file, shapefile_path, output_folder)
+   
+    
+
+
 # Create the MAIN window for user input
 window = tk.Tk()
 window.title("Green Equity Calculator")
