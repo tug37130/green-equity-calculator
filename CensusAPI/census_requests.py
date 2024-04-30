@@ -90,14 +90,14 @@ def fetch_census_data(statefp, countyfp, shapefile_path=None):
             "where": f"COUNTY='{countyfp}' AND STATE='{statefp}'",
             "outFields": "TRACT,GEOID",
             "returnGeometry": True,
-            "outSR": 4326
+            "outSR": 5070
         }
         # Put together the response from the API and make the request
         response = requests.get(base_url, params=params)
         # If pulled successfully, convert the geojson into a geodataframe. This is done so the geometries can be stored locally instead of saved to the user's device.
         if response.status_code == 200:
             geojson_data = response.json()
-            gdf = gpd.GeoDataFrame.from_features(geojson_data, crs='EPSG:4326')
+            gdf = gpd.GeoDataFrame.from_features(geojson_data, crs='EPSG:5070')
         # Error handling if the geojson was not pulled successfully.
         else:
             print("Error fetching GeoJSON data.")
