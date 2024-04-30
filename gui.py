@@ -23,7 +23,7 @@ from submit_but import submit_button_func
 
 # Function for inputs the number only and limiting length
 def numeric_input(text, max_length):
-    return text.isdigit() and len(text) <= max_length or text == ""
+    return (text.isdigit() and len(text) <= max_length) or text == ""
 
 # Function to browse the NLCD tif file
 def browse_nlcd_file():
