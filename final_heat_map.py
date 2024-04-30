@@ -181,6 +181,7 @@ def write_attach_temp(final_gdf, output_folder):
     
     clip_create_mask_layer(temp_raster_file, final_gdf, clipped_masked_raster)
     
+    
     # Extract temperature data for each Census tract in final_gdf
     output_shp_res = 'temperature_Census-tract.shp'
     extract_temp_write_shapefile(clipped_masked_raster, final_gdf, output_shp_res)

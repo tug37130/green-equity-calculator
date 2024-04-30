@@ -42,8 +42,8 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     
     # Impervious data
     #final_gdf = nlcd_attacher(nlcd2_file, final_gdf, epsg_code)
-    
+    '''
     # Heat data
     write_attach_temp(final_gdf, output_folder)
     
-    
+    '''
