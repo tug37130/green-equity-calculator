@@ -73,9 +73,6 @@ def submit():
     # output folder
     output_folder = filedialog.askdirectory()
     if output_folder:
-       # set directory to output_folder
-       os.chdir(output_folder)
-       
        # Generate plant recommendations and write to file in the chosen folder
        write_txt(statefp)
     
@@ -85,8 +82,9 @@ def submit():
        # Show a message box indicating successful completion
        tk.messagebox.showinfo("Info", "Processing starting. Output files will be saved in {}".format(output_folder))
 
-    submit_button_func(statefp, countyfp, nlcd_file, shapefile_path, output_folder)
-   
+    submit_button_func(statefp, countyfp, nlcd_file, shapefile_path)
+    tk.messagebox.showinfo("Info", "Processing Completed. Created files 'green_equity_index.shp' and 'PlantRecommendations.txt'")
+
     
 
 

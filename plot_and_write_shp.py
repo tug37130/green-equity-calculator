@@ -34,7 +34,7 @@ def write_gdf_to_shp(gdf, output_folder=None):
         geodataframe (GeoDataFrame): The GeoDataFrame to be written.
         output_filename (str): The filename for the output shapefile.
     """
-    os.chdir(output_folder)
+    
     output_filename = 'green_equity_index.shp'
     # If output_folder is provided, construct the full path
     if output_folder:

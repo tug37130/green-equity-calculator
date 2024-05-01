@@ -24,6 +24,7 @@ from rasterstats import zonal_stats
 # temperature
 from heat_map import *
 from plot_and_write_shp import write_gdf_to_shp
+from delete import delete_trash
 
 
 def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path=None):
@@ -54,6 +55,9 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     # Plotting
     
     # Write .shp
-    write_gdf_to_shp(final_gdf, output_folder)
+    write_gdf_to_shp(final_gdf)
+    
+    # Delete extra files process wrote
+    delete_trash(['clip_copy.tif', 'mask.tif', 'temperature.tif'])
 
 
