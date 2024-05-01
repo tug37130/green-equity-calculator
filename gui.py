@@ -80,9 +80,9 @@ def submit():
        display_recommendation()
     
        # Show a message box indicating successful completion
-       tk.messagebox.showinfo("Info", "Processing complete. Output files saved in {}".format(output_folder))
+       tk.messagebox.showinfo("Info", "Processing starting. Output files will be saved in {}".format(output_folder))
 
-    submit_button_func(statefp, countyfp, nlcd_file, shapefile_path, output_folder)
+    submit_button_func(statefp, countyfp, nlcd_file, shapefile_path)
    
     
 

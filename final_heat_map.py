@@ -5,7 +5,7 @@ Created on Mon Apr 22 21:59:25 2024
 @author: tur08893
 """
 
-import fiona
+#import fiona
 import numpy as np
 import rasterio
 import pystac_client
@@ -23,7 +23,7 @@ def set_bbox(gdf):
     bbox_of_interest = [bbox_values[0], bbox_values[1], bbox_values[2], bbox_values[3]]
     return bbox_of_interest
 
-def find_least_cloudy_item(catalog_url, bbox, time_range, collections):
+def find_least_cloudy_item(catalog_url, bbox_of_interest, time_of_interest, collections):
     try:
         # Open the STAC catalog
         catalog = pystac_client.Client.open(
@@ -150,7 +150,7 @@ def extract_temp_add_column(inraster, final_gdf):
 #final_gdf, bbox_of_interest = fetch_census_data(statefp, countyfp)
 # Connect to the STAC catalog and search for items within the time and area of interest
 
-def write_attach_temp(final_gdf, output_folder):
+def write_attach_temp(final_gdf):
     
     # get bbox
     bbox_of_interest = set_bbox(final_gdf)
@@ -161,6 +161,7 @@ def write_attach_temp(final_gdf, output_folder):
     time_of_interest = "2021-01-01/2021-12-31"
     selected_item = find_least_cloudy_item(catalog_url, bbox_of_interest, time_of_interest, collections_of_interest)
     # Load and process temperature data
+    bands_of_interest = ["lwir"]
     data = load_band_data(selected_item, bands_of_interest, bbox_of_interest)
     band_info = get_band_info(selected_item, bands_of_interest)
     celsius_data = convert_temperature(data["lwir11"], band_info)
