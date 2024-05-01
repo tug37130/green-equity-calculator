@@ -22,7 +22,8 @@ import numpy as np
 from rasterio.mask import mask
 from rasterstats import zonal_stats
 # temperature
-from final_heat_map import *
+from heat_map import *
+from plot_and_write_shp import write_gdf_to_shp
 
 
 def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path=None):
@@ -50,4 +51,9 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     print(final_gdf)
     print('Temperature Data attached.')
     
+    # Plotting
+    
+    # Write .shp
+    write_gdf_to_shp(final_gdf, output_folder)
+
 
