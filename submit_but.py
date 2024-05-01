@@ -40,8 +40,10 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     final_gdf = nlcd_attacher(nlcd_file, final_gdf)
     print(final_gdf)
     print('NLCD attached.')
+    
     # Impervious data
     #final_gdf = nlcd_attacher(nlcd2_file, final_gdf, epsg_code)
+    
     
     # Heat data
     final_gdf = write_attach_temp(final_gdf)
