@@ -23,8 +23,9 @@ from rasterio.mask import mask
 from rasterstats import zonal_stats
 # temperature
 from heat_map import *
-from plot_and_write_shp import write_gdf_to_shp
+from write_shp import write_gdf_to_shp
 from delete import delete_trash
+from index_calculator import calc_score, convert_to_float
 
 
 def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path=None):
@@ -51,6 +52,11 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     final_gdf = write_attach_temp(final_gdf)
     print(final_gdf)
     print('Temperature Data attached.')
+    
+    # Calculate Green Equity Index Score
+    final_gdf = calc_score(final_gdf)
+    print(final_gdf)
+    print('Green Equity Index Score calcuated.')
     
     # Plotting
     
