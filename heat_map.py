@@ -5,7 +5,7 @@ Created on Mon Apr 22 21:59:25 2024
 @author: tur08893
 """
 
-import fiona
+#import fiona
 import numpy as np
 import rasterio
 import pystac_client
@@ -17,13 +17,14 @@ from rasterio.mask import mask
 from rasterio.transform import from_bounds
 import odc.stac
 import os
+from census_requests import fetch_census_data
 
 def set_bbox(gdf):
     bbox_values = gdf.total_bounds
     bbox_of_interest = [bbox_values[0], bbox_values[1], bbox_values[2], bbox_values[3]]
     return bbox_of_interest
 
-def find_least_cloudy_item(catalog_url, bbox, time_range, collections):
+def find_least_cloudy_item(catalog_url, bbox_of_interest, time_of_interest, collections):
     try:
         # Open the STAC catalog
         catalog = pystac_client.Client.open(
@@ -82,7 +83,7 @@ def convert_temperature(data, band_info):
     return celsius_temp
 
 # Function for saving a temperature raster layer to a GeoTIFF file
-def save_temperature_raster(temp_raster_file, data_array, bbox, crs_epsg=5070):
+def save_temperature_raster(temp_raster_file, data_array, bbox, crs_epsg=4326):
     transform = from_bounds(*bbox, width=data_array.shape[1], height=data_array.shape[0])
     crs = rasterio.crs.CRS.from_epsg(crs_epsg)
     # Open a new GeoTIFF file for writing
@@ -150,7 +151,12 @@ def extract_temp_add_column(inraster, final_gdf):
 #final_gdf, bbox_of_interest = fetch_census_data(statefp, countyfp)
 # Connect to the STAC catalog and search for items within the time and area of interest
 
-def write_attach_temp(final_gdf, output_folder):
+from reprojection import reproject_a_gdf
+
+
+def write_attach_temp(final_gdf):
+    # reproject to 4326
+    final_gdf = reproject_a_gdf(final_gdf, 4326)
     
     # get bbox
     bbox_of_interest = set_bbox(final_gdf)
@@ -161,12 +167,13 @@ def write_attach_temp(final_gdf, output_folder):
     time_of_interest = "2021-01-01/2021-12-31"
     selected_item = find_least_cloudy_item(catalog_url, bbox_of_interest, time_of_interest, collections_of_interest)
     # Load and process temperature data
+    bands_of_interest = "lwir11"
     data = load_band_data(selected_item, bands_of_interest, bbox_of_interest)
     band_info = get_band_info(selected_item, bands_of_interest)
     celsius_data = convert_temperature(data["lwir11"], band_info)
     # writing raster
-    output_folder = output_folder
-    crs_epsg = 5070
+    
+    crs_epsg = 4326
     # Save temperature raster as a GeoTIFF
     temp_raster_file = "temperature.tif"
     save_temperature_raster(temp_raster_file, celsius_data, bbox_of_interest, crs_epsg)
@@ -176,12 +183,19 @@ def write_attach_temp(final_gdf, output_folder):
     # Extract temperature data for each Census tract using final_gdf
     extract_temp_add_column(clipped_masked_raster, final_gdf)
     final_gdf = extract_temp_add_column(clipped_masked_raster, final_gdf)
+    return final_gdf
+    '''
     #output path for raster files
     output_path1 = os.path.join(output_folder,temp_raster_file)
     output_path2 = os.path.join(output_folder,clipped_masked_raster)
-
-
-
-
+    '''
+'''
+# for solo usage testing
+st = '42'
+ct = '101'
+final_gdf = fetch_census_data(st, ct)
+final_gdf = write_attach_temp(final_gdf)
+print(final_gdf)
+'''
 
 

@@ -22,7 +22,9 @@ import numpy as np
 from rasterio.mask import mask
 from rasterstats import zonal_stats
 # temperature
-from final_heat_map import *
+from heat_map import *
+from plot_and_write_shp import write_gdf_to_shp
+from delete import delete_trash
 
 
 def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path=None):
@@ -39,11 +41,23 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     # Tree Canopy data
     final_gdf = nlcd_attacher(nlcd_file, final_gdf)
     print(final_gdf)
+    print('NLCD attached.')
     
     # Impervious data
     #final_gdf = nlcd_attacher(nlcd2_file, final_gdf, epsg_code)
-    '''
-    # Heat data
-    write_attach_temp(final_gdf, output_folder)
     
-    '''
+    
+    # Heat data
+    final_gdf = write_attach_temp(final_gdf)
+    print(final_gdf)
+    print('Temperature Data attached.')
+    
+    # Plotting
+    
+    # Write .shp
+    write_gdf_to_shp(final_gdf, output_folder)
+    
+    # Delete extra files process wrote
+    delete_trash(['clip_copy.tif', 'mask.tif', 'temperature.tif'])
+
+

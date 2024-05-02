@@ -13,3 +13,5 @@ Created on Tue Apr 30 19:24:10 2024
 # calculate field 
 # green_equity_index_score = calculate field 
 # return final_gdf
+
+
