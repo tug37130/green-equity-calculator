@@ -55,7 +55,7 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     # Plotting
     
     # Write .shp
-    write_gdf_to_shp(final_gdf)
+    write_gdf_to_shp(final_gdf, output_folder)
     
     # Delete extra files process wrote
     delete_trash(['clip_copy.tif', 'mask.tif', 'temperature.tif'])

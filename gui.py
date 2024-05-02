@@ -82,7 +82,7 @@ def submit():
        # Show a message box indicating successful completion
        tk.messagebox.showinfo("Info", "Processing starting. Output files will be saved in {}".format(output_folder))
 
-    submit_button_func(statefp, countyfp, nlcd_file, shapefile_path)
+    submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path)
     tk.messagebox.showinfo("Info", "Processing Completed. Created files 'green_equity_index.shp' and 'PlantRecommendations.txt'")
 
     
