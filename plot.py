@@ -80,25 +80,4 @@ def plot_gdf(gdf):
     final_plot = plt.show()
 
     return final_plot
-
-
-
-
-
-
-
-
-
-    # Plot the choropleth map
-    gdf.plot(column='COLUMN NAME')
     
-    # Add a title and legend
-    plt.title('Green Equity Score')
-    plt.legend()
-
-    # Show the plot
-    final_plot = plt.show()
-    
-    return final_plot
-
-
