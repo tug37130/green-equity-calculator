@@ -11,8 +11,8 @@ from matplotlib.colors import Normalize
 from matplotlib import cm
 import mapclassify as mc
 # This import doesn't seem to work, but the following does
-# from matplotlib_scalebar.scalebar import ScaleBar
-from matplotlib import ScaleBar
+from matplotlib_scalebar.scalebar import ScaleBar
+# from matplotlib import ScaleBar
 
 def plot_gdf(gdf):
     # create a empty plot for the choropleth map
@@ -25,7 +25,7 @@ def plot_gdf(gdf):
     cmap = plt.cm.get_cmap('YlGnBu', n_class)
 
     # This is the field which the choropleth map will be visualized
-    field = 'FINAL_COLUMN_NAME'
+    field = 'green_equity_index_score'
 
     # Plot the choropleth map based on the field, this can be changed as needed ('equal_interval', 'quantiles', 'FisherJenks', 'NaturalBreaks')
     # NaturalBreaks probably works best

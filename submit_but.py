@@ -26,6 +26,7 @@ from heat_map import *
 from write_shp import write_gdf_to_shp
 from delete import delete_trash
 from index_calculator import calc_score, convert_to_float
+from plot import plot_gdf
 
 
 def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path=None):
@@ -47,7 +48,6 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     # Impervious data
     #final_gdf = nlcd_attacher(nlcd2_file, final_gdf, epsg_code)
     
-    
     # Heat data
     final_gdf = write_attach_temp(final_gdf)
     print(final_gdf)
@@ -59,6 +59,7 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     print('Green Equity Index Score calcuated.')
     
     # Plotting
+    plot_gdf(final_gdf)
     
     # Write .shp
     write_gdf_to_shp(final_gdf, output_folder)
