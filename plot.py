@@ -77,7 +77,8 @@ def plot_gdf(gdf):
 
     ax.set_axis_off()
     plt.axis('equal')
-    final_plot = plt.show()
+    #final_plot = plt.show()
 
-    return final_plot
+    return plt.gcf()
+
     

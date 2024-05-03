@@ -29,6 +29,7 @@ from index_calculator import calc_score, convert_to_float
 from plot import plot_gdf
 
 
+
 def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path=None):
     
     # Fetch Census data
@@ -59,12 +60,15 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     print('Green Equity Index Score calcuated.')
     
     # Plotting
-    plot_gdf(final_gdf)
+    final_plot = plot_gdf(final_gdf)
     
     # Write .shp
     write_gdf_to_shp(final_gdf, output_folder)
     
     # Delete extra files process wrote
     delete_trash(['clip_copy.tif', 'mask.tif', 'temperature.tif'])
+    
+    return final_plot
+    
 
 

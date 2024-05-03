@@ -8,15 +8,15 @@ import pandas as pd
 import geopandas as gpd
 from plant_recommendation import write_txt
 from census_requests import fetch_census_data
-
 import os
 import rasterio
 import geopandas as gpd
 import numpy as np
 from rasterio.mask import mask
 from rasterstats import zonal_stats
-########
 from submit_but import submit_button_func
+from plot import plot_gdf
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Function for inputs the number only and limiting length
 def numeric_input(text, max_length):
@@ -27,7 +27,7 @@ def browse_nlcd_file():
     file_path = filedialog.askopenfilename(filetypes=[("TIF files", "*.tif")])
     nlcd_entry.delete(0, tk.END)
     nlcd_entry.insert(0, file_path)
-########
+
 '''
 def browse_nlcd2_file():
     file_path = filedialog.askopenfilename(filetypes=[("TIF files", "*.tif")])
@@ -61,6 +61,18 @@ def display_recommendation():
     else:
         tk.messagebox.showinfo("Info", "No plant recommendations found. Please submit to generate recommendations.")
 
+def show_plot(plot):
+    # Create a new Toplevel window
+    plot_window = tk.Toplevel(window)
+    plot_window.title('Plot')
+
+    # Embed the plot in the Toplevel window
+    canvas = FigureCanvasTkAgg(plot, master=plot_window)
+    canvas.draw()
+    canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+
+
 # Function for submit button
 def submit():
     statefp = statefp_entry.get()
@@ -82,9 +94,11 @@ def submit():
        # Show a message box indicating successful completion
        tk.messagebox.showinfo("Info", "Processing starting. Output files will be saved in {}".format(output_folder))
 
-    submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path)
+    final_plot = submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_path)
     tk.messagebox.showinfo("Info", "Processing Completed. Created files 'green_equity_index.shp' and 'PlantRecommendations.txt'")
-
+    
+    # Display window of preview map
+    show_plot(final_plot)
     
 
 
