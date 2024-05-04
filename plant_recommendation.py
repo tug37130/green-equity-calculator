@@ -21,7 +21,7 @@ def check_state(statefp):
     elif statefp in ["15"]:
         return "Hawaii"
     else:
-        return "Invalid input. Please input a 2 digits State FIPS code."
+        return "Invalid input. Please input a valid 2 digits State FIPS code."
 
 # def check_state(state_abbr):
 #     if state_abbr in ['CT', 'MA', 'ME', 'NH', 'NY', 'RI', 'VT']:
@@ -326,12 +326,15 @@ def recommended_plants(statefp):
 
 ###
 # output written to a PlantRecommendation.txt
-def write_txt(statefp):
+def write_txt(statefp, output_folder):
     # Call recommended_plants() to get recommendations
     recommendations = recommended_plants(statefp)
     
+    # Construct the file path for the PlantRecommendation.txt file in the output folder
+    output_file_path = os.path.join(output_folder, "PlantRecommendation.txt")
+    
     # Create or open PlantRecommendation.txt in write mode
-    with open("PlantRecommendation.txt", "w") as f:
+    with open(output_file_path, "w") as f:
         # Write recommendations to PlantRecommendation.txt
         f.write("Recommended Plants for State FIPS Code {}\n".format(statefp))
         f.write("================================\n\n")
@@ -352,7 +355,7 @@ def write_txt(statefp):
         for flower, scientific_name in recommendations["Wildflowers"].items():
             f.write("- {}: {}\n".format(flower, scientific_name))
 
-write_txt("06")
+#write_txt("07")
 
 #%%
 # delete PlantRecommendation.txt tool
