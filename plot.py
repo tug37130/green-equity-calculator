@@ -10,9 +10,7 @@ import matplotlib as mpl
 from matplotlib.colors import Normalize
 from matplotlib import cm
 import mapclassify as mc
-# This import doesn't seem to work, but the following does
-from matplotlib_scalebar.scalebar import ScaleBar
-# from matplotlib import ScaleBar
+
 
 def plot_gdf(gdf, statefp, countyfp):
     # create a empty plot for the choropleth map
@@ -62,19 +60,6 @@ def plot_gdf(gdf, statefp, countyfp):
 
     cbar.ax.set_xlabel('Green Equity Score')
 
-    # Color
-    scale2 = ScaleBar(
-        dx=1, 
-    #     label='Scale 2', 
-        location='lower right',
-        font_properties={'family':'serif', 'size': 'large'},
-    #     color='#b32400', ##b32400
-    #     box_color='yellow',
-        box_alpha=1  # Transparecy, can change as needed
-    )
-
-    ax.add_artist(scale2)
-    
     # Set the title of the plot
     title = f"Mapping Green Equity Score of County {countyfp} of State {statefp}"
     ax.set_title(title, fontsize=16, pad=20)
