@@ -14,7 +14,7 @@ import mapclassify as mc
 from matplotlib_scalebar.scalebar import ScaleBar
 # from matplotlib import ScaleBar
 
-def plot_gdf(gdf):
+def plot_gdf(gdf, statefp, countyfp):
     # create a empty plot for the choropleth map
     fig, ax = plt.subplots(1, figsize=(8, 8))
 
@@ -30,13 +30,13 @@ def plot_gdf(gdf):
     # Plot the choropleth map based on the field, this can be changed as needed ('equal_interval', 'quantiles', 'FisherJenks', 'NaturalBreaks')
     # NaturalBreaks probably works best
     gdf.plot(column=field, 
-                        cmap='YlGnBu', 
-                        edgecolor='0.5', 
-                        ax = ax,
-                        linewidth=0.5,
-    #                      legend=True, #don't use the legend
-                        k=n_class, #the number of classes
-                        scheme='NaturalBreaks')
+            cmap='YlGnBu', 
+            edgecolor='0.5', 
+            ax = ax,
+            linewidth=0.5,
+#                      legend=True, #don't use the legend
+            k=n_class, #the number of classes
+            scheme='NaturalBreaks')
 
 
     # Getting the Natural Breaks bins
@@ -46,7 +46,7 @@ def plot_gdf(gdf):
 
 
     # Set the location of the legend (x0, y0, width, height), can be adjusted as needed
-    axins = ax.inset_axes([0.2, 1., 0.6, 0.03])
+    axins = ax.inset_axes([0.2, -0.05, 0.6, 0.03])
 
     # Create a color bar for the map
     norm = mpl.colors.BoundaryNorm(vals, cmap.N)
@@ -60,7 +60,7 @@ def plot_gdf(gdf):
                                     ticks=vals,
                                     shrink=0.4)
 
-    cbar.ax.set_xlabel('GREEN EQUITY SCORE')
+    cbar.ax.set_xlabel('Green Equity Score')
 
     # Color
     scale2 = ScaleBar(
@@ -74,11 +74,14 @@ def plot_gdf(gdf):
     )
 
     ax.add_artist(scale2)
+    
+    # Set the title of the plot
+    title = f"Mapping Green Equity Score of County {countyfp} of State {statefp}"
+    ax.set_title(title, fontsize=16, pad=20)
+
 
     ax.set_axis_off()
     plt.axis('equal')
     #final_plot = plt.show()
 
     return plt.gcf()
-
-    
