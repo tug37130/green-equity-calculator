@@ -9,7 +9,7 @@ import requests
 import pandas as pd
 import geopandas as gpd
 # plants
-from plant_recommendation import write_txt
+from plant_recommendation_folder import write_txt
 # census
 from census_requests import fetch_census_data
 ######## NLCD imports
@@ -60,7 +60,7 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     print('Green Equity Index Score calcuated.')
     
     # Plotting
-    final_plot = plot_gdf(final_gdf)
+    final_plot = plot_gdf(final_gdf, statefp, countyfp)
     
     # Write .shp
     write_gdf_to_shp(final_gdf, output_folder)
@@ -70,5 +70,3 @@ def submit_button_func(statefp, countyfp, nlcd_file, output_folder, shapefile_pa
     
     return final_plot
     
-
-
