@@ -9,7 +9,7 @@ import requests
 import pandas as pd
 import geopandas as gpd
 # plants
-from plant_recommendation_folder import write_txt
+from plant_recommendation import write_txt
 # census
 from census_requests import fetch_census_data
 ######## NLCD imports
