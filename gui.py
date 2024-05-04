@@ -5,7 +5,7 @@ import os
 import requests
 import pandas as pd
 import geopandas as gpd
-from plant_recommendation_folder import write_txt
+from plant_recommendation import write_txt
 from census_requests import fetch_census_data
 import os
 import rasterio
