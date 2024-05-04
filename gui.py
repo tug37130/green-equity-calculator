@@ -137,15 +137,15 @@ statefp_entry.grid(row=0, column=1, padx=5, pady=5, columnspan=2, sticky="we")
 countyfp_label.grid(row=1, column=0, padx=10, pady=5, sticky="e")
 countyfp_entry.grid(row=1, column=1, padx=5, pady=5, columnspan=2, sticky="we")
 
-nlcd_label.grid(row=3, column=0, padx=10, pady=5, sticky="e")
-nlcd_entry.grid(row=3, column=1, padx=5, pady=5, columnspan=2, sticky="we")
-browse_nlcd_button.grid(row=3, column=3, padx=5, pady=5)
+nlcd_label.grid(row=2, column=0, padx=10, pady=5, sticky="e")
+nlcd_entry.grid(row=2, column=1, padx=5, pady=5, columnspan=2, sticky="we")
+browse_nlcd_button.grid(row=2, column=3, padx=5, pady=5)
 
-census_tract_label.grid(row=4, column=0, padx=10, pady=5, sticky="e")
-census_tract_entry.grid(row=4, column=1, padx=5, pady=5, columnspan=2, sticky="we")
-browse_census_tract_button.grid(row=4, column=3, padx=5, pady=5)
+census_tract_label.grid(row=3, column=0, padx=10, pady=5, sticky="e")
+census_tract_entry.grid(row=3, column=1, padx=5, pady=5, columnspan=2, sticky="we")
+browse_census_tract_button.grid(row=3, column=3, padx=5, pady=5)
 
-submit_button.grid(row=5, column=1, columnspan=2, padx=5, pady=10)
+submit_button.grid(row=4, column=1, columnspan=2, padx=5, pady=10)
 
 
 # Start the GUI event loop
